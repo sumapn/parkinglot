@@ -10,7 +10,7 @@ val funMap = mapOf(
 
 fun main(args : Array<String>) {
 
-  val  carpark = Parkinglot(20)
+  val  carpark = Parkinglot(5)
 
   while(true) {
     print("$ > ")
@@ -29,7 +29,7 @@ fun main(args : Array<String>) {
     }
     handler(carpark,words)
     carpark.allocateSlot()
-    carpark.leaveCar(4)
+    carpark.leaveCar()
 
   }
 }
@@ -42,8 +42,8 @@ class Parkinglot(val capacity : Int) {
   val carSlots = Array(capacity) { Slot(false, "", "") }
 
   fun allocateSlot() : Int{
-     for(i in 0..carSlots.size) {
-       if (!carSlots[i].parked) {
+     for(i in 0 until carSlots.size) {
+     if (!carSlots[i].parked) {
          return i
        }
      }
@@ -63,23 +63,32 @@ class Parkinglot(val capacity : Int) {
     carSlots[slotNum].parked = false
   }
 
+
 }
 
 fun gotoParkingSlot(carpark: Parkinglot , args: List<String>) {
-  println("Parking is called with these args")
   val car_reg_num = args[1]
   val car_colour = args[2]
 
     val slot = carpark.allocateSlot()
-     carpark.park(car_reg_num,car_colour,slot)
+    if(slot == -1)
+    {
+      println("The Parking lot is full")
+    }
+  else
+    {
+      carpark.park(car_reg_num,car_colour,slot)
+      println("Your car is parked at  slot = $slot ")
+    }
 
-  println(car_reg_num)
-  println(car_colour)
+
+  //println(car_reg_num)
+  //println(car_colour)
 }
 
 
 fun leaveFromtheLot(carpark: Parkinglot,args: List<String>){
-  println("Car Removed From The Lot :")
+  println("Your Car is  Removed From The Lot :")
   val car_SlotId = args[1]
 
   val car_int_SlotId = car_SlotId.toInt()
