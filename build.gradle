@@ -14,6 +14,9 @@ apply plugin: 'java'
 apply plugin: 'kotlin'
 
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+sourceCompatibility = 1.8
 version = '1.0'
 
 repositories {
@@ -21,9 +24,19 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    testCompile group: 'junit', name: 'junit', version: '4.11'
 }
+
+task fatJar(type: Jar) {
+  manifest {
+    attributes 'Main-Class': 'com.example.carparking.HelloWorldKt'
+  }
+  baseName = project.name + '-all'
+  from { configurations.runtimeClasspath.collect { it.isDirectory()? it: zipTree(it) } }
+  with jar
+}
+
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
